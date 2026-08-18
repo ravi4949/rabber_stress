@@ -1,0 +1,29 @@
+experiment_name: "CANN_NeoHookean_Benchmark"
+
+dataset:
+  model_name: "neo_hookean"
+  n_points: 100
+  output_dir: "data"
+
+model:
+  type: "ModelA"
+  input_dim: 3
+  hidden_dims: [32, 32]
+  activation: "softplus"
+  use_residual: false
+
+convexity_strategy: "ICNN"
+
+training:
+  lr: 0.001
+  weight_decay: 0.00001
+  epochs: 50
+  batch_size: 32
+  patience: 10
+  grad_clip: 1.0
+
+evaluation:
+  test_split: 0.2
+
+visualization:
+  output_dir: "visualization"

@@ -1,0 +1,79 @@
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ==========================================
+# Node.js & Frontend Build Outputs
+# ==========================================
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# SQLite Databases & Local Storage
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+backend/rubber_stress.db
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
+backend/storage/reports/*
+!backend/storage/reports/.gitkeep
+
+# ==========================================
+# ML Checkpoints, Model Weights & Binaries
+# ==========================================
+*.pt
+*.pth
+*.onnx
+*.ckpt
+*.safetensors
+*.npz
+checkpoints/*
+!checkpoints/.gitkeep
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# ==========================================
+# Operating System & IDE Files
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+.gemini/
