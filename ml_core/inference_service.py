@@ -36,9 +36,6 @@ def fit_mooney_rivlin_least_squares(stretches: np.ndarray, exp_stress: np.ndarra
     if mode_lower in ["biaxial", "equibiaxial"]:
         x1 = 2.0 * (stretches - stretches**(-5))
         x2 = 2.0 * (stretches**2 - stretches**(-4))
-    elif mode_lower in ["pure_shear", "planar"]:
-        x1 = 2.0 * (stretches - stretches**(-3))
-        x2 = 2.0 * (1.0 - stretches**(-2))
     else:  # uniaxial
         x1 = 2.0 * (stretches - stretches**(-2))
         x2 = 2.0 * (1.0 - stretches**(-3))
@@ -63,15 +60,13 @@ def fit_mooney_rivlin_least_squares(stretches: np.ndarray, exp_stress: np.ndarra
     return C10, C01, mu_eff
 
 def predict_stress_mooney_rivlin(stretches: np.ndarray, C10: float, C01: float, mode: str) -> np.ndarray:
-    """Predicts nominal stress across any deformation mode using fitted Mooney-Rivlin constants."""
+    """Predicts nominal stress across uniaxial or biaxial deformation mode using fitted Mooney-Rivlin constants."""
     stretches = np.clip(np.asarray(stretches, dtype=np.float64), 1.0, None)
     mode_lower = str(mode).lower()
     
     if mode_lower in ["biaxial", "equibiaxial"]:
         p = 2.0 * C10 * (stretches - stretches**(-5)) + 2.0 * C01 * (stretches**2 - stretches**(-4))
-    elif mode_lower in ["pure_shear", "planar"]:
-        p = 2.0 * C10 * (stretches - stretches**(-3)) + 2.0 * C01 * (1.0 - stretches**(-2))
-    else:
+    else:  # uniaxial
         p = 2.0 * C10 * (stretches - stretches**(-2)) + 2.0 * C01 * (1.0 - stretches**(-3))
         
     return np.maximum(p, 0.0)
@@ -87,10 +82,6 @@ def make_deformation_gradient(stretches: np.ndarray, mode: str) -> torch.Tensor:
         F[:, 0, 0] = stretches_t
         F[:, 1, 1] = stretches_t
         F[:, 2, 2] = 1.0 / (stretches_t ** 2 + 1e-7)
-    elif mode_lower in ["pure_shear", "planar"]:
-        F[:, 0, 0] = stretches_t
-        F[:, 1, 1] = 1.0
-        F[:, 2, 2] = 1.0 / (stretches_t + 1e-7)
     else:  # uniaxial
         F[:, 0, 0] = stretches_t
         F[:, 1, 1] = 1.0 / torch.sqrt(stretches_t + 1e-7)
@@ -106,7 +97,7 @@ def analyze(
     """
     Takes a CSV of raw stress-strain test data for one deformation mode,
     fits deterministic Mooney-Rivlin & CANN constitutive models,
-    and returns predicted behavior across all deformation modes plus fit-quality metrics.
+    and returns predicted behavior across uniaxial and biaxial deformation modes plus fit-quality metrics.
     """
     warnings = []
     
@@ -158,11 +149,11 @@ def analyze(
         loss.backward()
         optimizer.step()
 
-    # Generate multi-mode predicted curves across standard deformation modes
+    # Generate multi-mode predicted curves across uniaxial and biaxial deformation modes
     eval_stretches = np.linspace(1.0, 4.0, 50, dtype=np.float64)
     predicted_curves = {}
 
-    for mode in ["uniaxial", "biaxial", "pure_shear"]:
+    for mode in ["uniaxial", "biaxial"]:
         # Predict using deterministic analytical Mooney-Rivlin model
         curve_stress = predict_stress_mooney_rivlin(eval_stretches, C10, C01, mode)
         

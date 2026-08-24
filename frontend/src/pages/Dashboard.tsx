@@ -103,7 +103,6 @@ export const Dashboard: React.FC = () => {
             <option value="all">All Modes</option>
             <option value="uniaxial">Uniaxial</option>
             <option value="biaxial">Equibiaxial</option>
-            <option value="pure_shear">Pure Shear (Planar)</option>
           </select>
         </div>
 

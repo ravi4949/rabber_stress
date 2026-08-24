@@ -22,7 +22,7 @@ from constitutive_models.yeoh import Yeoh
 from constitutive_models.arruda_boyce import ArrudaBoyce
 
 def get_deformation_gradient(mode: str, param: float) -> np.ndarray:
-    """Returns 3x3 deformation gradient tensor F for given mode and deformation parameter."""
+    """Returns 3x3 deformation gradient tensor F for given mode (uniaxial or biaxial)."""
     if mode == "uniaxial":
         # param = stretch lambda
         l = param
@@ -30,24 +30,8 @@ def get_deformation_gradient(mode: str, param: float) -> np.ndarray:
     elif mode == "biaxial":
         l = param
         F = np.diag([l, l, 1.0 / (l**2)])
-    elif mode == "simple_shear":
-        # param = shear strain gamma
-        gamma = param
-        F = np.array([
-            [1.0, gamma, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0]
-        ])
-    elif mode == "pure_shear":
-        l = param
-        F = np.diag([l, 1.0, 1.0 / l])
-    elif mode == "volumetric":
-        # param = volumetric ratio J
-        J = param
-        l = J**(1.0/3.0)
-        F = np.diag([l, l, l])
     else:
-        raise ValueError(f"Unknown deformation mode: {mode}")
+        raise ValueError(f"Unknown deformation mode: {mode}. Only 'uniaxial' and 'biaxial' are supported.")
     return F
 
 def compute_invariants(F: np.ndarray) -> Tuple[float, float, float, float]:
@@ -60,7 +44,7 @@ def compute_invariants(F: np.ndarray) -> Tuple[float, float, float, float]:
     return I1, I2, I3, J
 
 def generate_dataset_for_model(model_name: str, output_dir: str = "data", n_points: int = 100):
-    """Generates synthetic dataset for a given hyperelastic model across all deformation modes."""
+    """Generates synthetic dataset for a given hyperelastic model across uniaxial and biaxial deformation modes."""
     os.makedirs(output_dir, exist_ok=True)
     
     if model_name == "neo_hookean":
@@ -79,9 +63,6 @@ def generate_dataset_for_model(model_name: str, output_dir: str = "data", n_poin
     modes_params = {
         "uniaxial": np.linspace(1.0, 4.0, n_points),
         "biaxial": np.linspace(1.0, 3.0, n_points),
-        "simple_shear": np.linspace(0.0, 2.0, n_points),
-        "pure_shear": np.linspace(1.0, 3.0, n_points),
-        "volumetric": np.linspace(0.8, 1.2, n_points),
     }
 
     records = []
@@ -97,7 +78,7 @@ def generate_dataset_for_model(model_name: str, output_dir: str = "data", n_poin
                 if model_name == "mooney_rivlin":
                     W = float(model.strain_energy(I1, I2, J))
                 elif model_name == "ogden":
-                    l1, l2, l3 = np.diag(F) if mode != "simple_shear" else np.linalg.svd(F)[1]
+                    l1, l2, l3 = np.diag(F)
                     W = float(model.strain_energy((l1, l2, l3), J))
                 else:
                     W = float(model.strain_energy(I1, J))

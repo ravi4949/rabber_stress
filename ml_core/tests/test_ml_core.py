@@ -45,3 +45,5 @@ def test_inference_service():
     assert isinstance(result, AnalysisResult)
     assert "r2_score" in result.metrics
     assert "uniaxial" in result.predicted_curves
+    assert "biaxial" in result.predicted_curves
+    assert "pure_shear" not in result.predicted_curves

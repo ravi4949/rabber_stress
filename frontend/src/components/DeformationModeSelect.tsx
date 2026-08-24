@@ -26,9 +26,6 @@ export const DeformationModeSelect: React.FC<DeformationModeSelectProps> = ({ va
       >
         <option value="uniaxial">Uniaxial Tension ($\lambda_1 = \lambda$)</option>
         <option value="biaxial">Equibiaxial Tension ($\lambda_1 = \lambda_2 = \lambda$)</option>
-        <option value="simple_shear">Simple Shear ($\gamma$)</option>
-        <option value="pure_shear">Pure Shear ($\lambda_1 = \lambda, \lambda_2 = 1$)</option>
-        <option value="volumetric">Volumetric Compression / Expansion ($J$)</option>
       </select>
     </div>
   );

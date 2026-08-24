@@ -5,7 +5,7 @@
 ## Core Capabilities
 
 1. **Analytical Constitutive Laws**: Neo-Hookean, Mooney-Rivlin, Ogden, Yeoh, and Arruda-Boyce 8-Chain models.
-2. **Deformation Modes**: Synthetic data generation for Uniaxial tension, Equibiaxial tension, Simple shear, Pure shear, and Volumetric deformation.
+2. **Deformation Modes**: Synthetic data generation and constitutive modeling for Uniaxial tension and Equibiaxial tension deformation modes.
 3. **Kinematics & Invariants**: Tensor transformation $F \to C \to (I_1, I_2, I_3, J)$ guaranteeing frame invariance (objectivity) and material isotropy by construction.
 4. **Physics-Informed Neural Network (Model A)**: Predicts scalar strain energy density $W(I_1, I_2, J)$ with reference normalization $W(\mathbf{I}) = 0$ and non-negative energy constraints.
 5. **Autodiff Stress Engine**: Exact First Piola $\mathbf{P} = \partial W / \partial \mathbf{F}$ and Cauchy stress $\boldsymbol{\sigma} = \frac{1}{J} \mathbf{F} \mathbf{S} \mathbf{F}^T$ derived via `torch.autograd`.

@@ -1,4 +1,4 @@
-export type DeformationMode = 'uniaxial' | 'biaxial' | 'simple_shear' | 'pure_shear' | 'volumetric';
+export type DeformationMode = 'uniaxial' | 'biaxial';
 
 export type JobStatus = 'queued' | 'running' | 'done' | 'failed';
 

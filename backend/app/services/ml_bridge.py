@@ -50,8 +50,7 @@ def analyze(
 
         predicted_curves = {
             "uniaxial": {"stretch": stretches, "stress": stresses},
-            "biaxial": {"stretch": stretches, "stress": [0.0, 1.8, 4.2, 7.5, 12.1, 18.0, 25.4]},
-            "pure_shear": {"stretch": stretches, "stress": [0.0, 1.4, 3.2, 5.8, 9.2, 13.5, 18.9]}
+            "biaxial": {"stretch": stretches, "stress": [0.0, 1.8, 4.2, 7.5, 12.1, 18.0, 25.4]}
         }
 
         return AnalysisResult(

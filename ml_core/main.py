@@ -105,9 +105,11 @@ def run_pipeline():
 
     # 8. Inference Service Test
     print("\n[Step 8] Testing single integration seam inference service...")
-    analysis_res = analyze(csv_path, deformation_mode="uniaxial")
-    print(f"  Inference Result R2: {analysis_res.metrics['r2_score']:.4f}")
-    print(f"  Warnings: {analysis_res.warnings}")
+    analysis_res_uni = analyze(csv_path, deformation_mode="uniaxial")
+    print(f"  Uniaxial Inference Result R2: {analysis_res_uni.metrics['r2_score']:.4f}")
+    analysis_res_bi = analyze(csv_path, deformation_mode="biaxial")
+    print(f"  Biaxial Inference Result R2:  {analysis_res_bi.metrics['r2_score']:.4f}")
+    print(f"  Predicted modes: {list(analysis_res_bi.predicted_curves.keys())}")
 
     print("\n" + "=" * 60)
     print("  Pipeline Completed Successfully!  ")
